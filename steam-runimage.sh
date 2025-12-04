@@ -140,7 +140,6 @@ chmod +x ./pelf
 
 echo "Generating [dwfs]AppBundle...(Go runtime)"
 ./pelf --add-appdir ./AppDir \
-	--compression "-C -zstd:level=22 -S26 -B6" \
 	--appbundle-id="com.valvesoftware.Steam-$(date +%d_%m_%Y)-ivanHC" \
 	--disable-use-random-workdir \
 	--add-updinfo "$UPINFO" \
