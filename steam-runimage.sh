@@ -15,7 +15,6 @@ if [ ! -x 'runimage' ]; then
 	chmod +x runimage
 fi
 
-# Create install script as a separate file
 cat > ./run_install.sh <<'INSTALL_SCRIPT'
 #!/bin/sh
 set -e
@@ -39,7 +38,15 @@ echo '== install debloated packages for space saving (optionally)'
 EXTRA_PACKAGES="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/refs/heads/main/useful-tools/get-debloated-pkgs.sh"
 wget --retry-connrefused --tries=30 "$EXTRA_PACKAGES" -O ./get-debloated-pkgs.sh
 chmod +x ./get-debloated-pkgs.sh
-./get-debloated-pkgs.sh --add-mesa gtk3-mini opus-mini libxml2-mini gdk-pixbuf2-mini librsvg-mini
+
+# Remove conflicting packages first to allow downgrades
+pac -Rdd --noconfirm vulkan-mesa-device-select vulkan-mesa-implicit-layers || true
+
+# Try debloated packages, restore standard ones if they fail
+if ! ./get-debloated-pkgs.sh --add-mesa gtk3-mini opus-mini libxml2-mini gdk-pixbuf2-mini librsvg-mini; then
+	echo "WARNING: Could not install debloated packages, restoring standard packages"
+	pac --needed --noconfirm -S vulkan-mesa-device-select vulkan-mesa-implicit-layers
+fi
 
 pac -Rsn --noconfirm llvm-libs || true
 pac -Rsn --noconfirm glycin || true
