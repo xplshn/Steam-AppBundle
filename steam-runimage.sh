@@ -13,7 +13,7 @@ URUNTIME="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/refs
 
 if [ ! -x 'runimage' ]; then
 	echo '== download base RunImage'
-	curl -o runimage -L "https://github.com/VHSgunzo/runimage/releases/download/continuous/runimage-$(uname -m)"
+	curl -o runimage -L "https://github.com/pkgforge-dev/runimage-base/releases/download/cachyos_$(uname -m)/runimage"
 	chmod +x runimage
 fi
 
@@ -132,7 +132,7 @@ export VERSION="$(cat ~/version)"
 export OUTNAME=Steam-"$VERSION"-anylinux-"$ARCH".AppImage
 wget --retry-connrefused --tries=30 "$URUNTIME" -O ./uruntime2appimage
 chmod +x ./uruntime2appimage
-timeout 2 ./uruntime2appimage || true
+./uruntime2appimage
 
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH*.dwfs.AppBundle.zsync"
 wget -qO ./pelf "https://github.com/xplshn/pelf/releases/latest/download/pelf_$ARCH"
@@ -145,5 +145,7 @@ echo "Generating [dwfs]AppBundle...(Go runtime)"
 	--add-updinfo "$UPINFO" \
 	--output-to "Steam-${VERSION}-anylinux-${ARCH}.dwfs.AppBundle"
 zsyncmake ./*.AppBundle -u ./*.AppBundle
+
+rm *.AppImage*
 
 echo "All Done!"
