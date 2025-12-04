@@ -19,7 +19,6 @@ jobs:
         sudo apt install zsync
         chmod +x ./steam-runimage.sh && ./steam-runimage.sh
         mkdir -p ./dist
-        mv *.AppImage* dist/
         mv *.AppBundle* dist/
     
     - name: Upload artifact
@@ -63,5 +62,4 @@ jobs:
             generate_release_notes: false
             make_latest: true
             files: |
-              *.AppImage*
               *.AppBundle*
