@@ -29,9 +29,6 @@ run_install() {
 		yad mangohud lib32-mangohud gamescope gamemode zenity-gtk3 steam-screensaver-fix
 	)
 
-	echo '== checking for updates'
-	rim-update
-
 	echo '== install packages'
 	pac --needed --noconfirm -S "${INSTALL_PKGS[@]}"
 
