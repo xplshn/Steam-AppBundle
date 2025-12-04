@@ -127,25 +127,17 @@ rm -rfv ./AppDir/sharun/bin/chisel \
 	./AppDir/rootfs/usr/share/icons/AdwaitaLegacy \
 	./AppDir/rootfs/usr/lib/udev/hwdb.bin
 
-# MAKE APPIMAGE WITH URUNTIME
-echo "Generating AppImage..."
-export VERSION="$(cat ~/version)"
-export OUTNAME=Steam-"$VERSION"-anylinux-"$ARCH".AppImage
-wget --retry-connrefused --tries=30 "$URUNTIME" -O ./uruntime2appimage
-chmod +x ./uruntime2appimage
-./uruntime2appimage
-
-# make squashfs appbundle
-UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH*.AppBundle.zsync"
+UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH*.dwfs.AppBundle.zsync"
 wget -qO ./pelf "https://github.com/xplshn/pelf/releases/latest/download/pelf_$ARCH"
 chmod +x ./pelf
-echo "Generating [sqfs]AppBundle...(Go runtime)"
+
+echo "Generating [dwfs]AppBundle...(Go runtime)"
 ./pelf --add-appdir ./AppDir \
-	--compression "-comp zstd -Xcompression-level 22 -b 1M" \
+	--compression "-zstd:level=22 -S26 -B6" \
 	--appbundle-id="com.valvesoftware.Steam-$(date +%d_%m_%Y)-ivanHC" \
-	--appimage-compat --disable-use-random-workdir \
+	--disable-use-random-workdir \
 	--add-updinfo "$UPINFO" \
-	--output-to "Steam-${VERSION}-anylinux-${ARCH}.sqfs.AppBundle"
+	--output-to "Steam-${VERSION}-anylinux-${ARCH}.dwfs.AppBundle"
 zsyncmake ./*.AppBundle -u ./*.AppBundle
 
 echo "All Done!"
