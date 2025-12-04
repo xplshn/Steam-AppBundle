@@ -132,7 +132,7 @@ export VERSION="$(cat ~/version)"
 export OUTNAME=Steam-"$VERSION"-anylinux-"$ARCH".AppImage
 wget --retry-connrefused --tries=30 "$URUNTIME" -O ./uruntime2appimage
 chmod +x ./uruntime2appimage
-timeout 2 ./uruntime2appimage
+timeout 2 ./uruntime2appimage || true
 
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH*.dwfs.AppBundle.zsync"
 wget -qO ./pelf "https://github.com/xplshn/pelf/releases/latest/download/pelf_$ARCH"
