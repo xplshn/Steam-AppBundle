@@ -109,6 +109,9 @@ rm -f ./steam.RunImage
 mv ./RunDir ./AppDir
 mv ./AppDir/Run ./AppDir/AppRun
 
+cp ~/steam.desktop ./AppDir/
+cp ~/steam.png ./AppDir/
+
 ln -s ./steam ./AppDir/rootfs/usr/bin/steam-runtime || true
 ln -s ./steam ./AppDir/rootfs/usr/bin/steam-native || true
 
