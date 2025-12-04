@@ -39,13 +39,23 @@ EXTRA_PACKAGES="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImage
 wget --retry-connrefused --tries=30 "$EXTRA_PACKAGES" -O ./get-debloated-pkgs.sh
 chmod +x ./get-debloated-pkgs.sh
 
-# Remove conflicting packages first to allow downgrades
-pac -Rdd --noconfirm vulkan-mesa-device-select vulkan-mesa-implicit-layers || true
+# Check which packages exist and save state
+VULKAN_DEVICE_SELECT=""
+VULKAN_IMPLICIT=""
+pacman -Q vulkan-mesa-device-select >/dev/null 2>&1 && VULKAN_DEVICE_SELECT="vulkan-mesa-device-select"
+pacman -Q vulkan-mesa-implicit-layers >/dev/null 2>&1 && VULKAN_IMPLICIT="vulkan-mesa-implicit-layers"
 
-# Try debloated packages, restore standard ones if they fail
+# Remove conflicting packages if they exist
+[ -n "$VULKAN_DEVICE_SELECT" ] && pac -Rdd --noconfirm vulkan-mesa-device-select
+[ -n "$VULKAN_IMPLICIT" ] && pac -Rdd --noconfirm vulkan-mesa-implicit-layers
+
+# Try debloated packages, restore if they fail
 if ! ./get-debloated-pkgs.sh --add-mesa gtk3-mini opus-mini libxml2-mini gdk-pixbuf2-mini librsvg-mini; then
 	echo "WARNING: Could not install debloated packages, restoring standard packages"
-	pac --needed --noconfirm -S vulkan-mesa-device-select vulkan-mesa-implicit-layers
+	RESTORE_PKGS=""
+	[ -n "$VULKAN_DEVICE_SELECT" ] && RESTORE_PKGS="$RESTORE_PKGS vulkan-mesa-device-select"
+	[ -n "$VULKAN_IMPLICIT" ] && RESTORE_PKGS="$RESTORE_PKGS vulkan-mesa-implicit-layers"
+	[ -n "$RESTORE_PKGS" ] && pac --needed --noconfirm -S $RESTORE_PKGS
 fi
 
 pac -Rsn --noconfirm llvm-libs || true
