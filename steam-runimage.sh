@@ -21,7 +21,7 @@ run_install() {
 	set -e
 
 	INSTALL_PKGS=(
-		steam egl-wayland vulkan-radeon lib32-vulkan-radeon
+		pacutils steam egl-wayland vulkan-radeon lib32-vulkan-radeon
 		vulkan-intel lib32-vulkan-intel vulkan-nouveau lib32-vulkan-nouveau
 		lib32-libpipewire libpipewire pipewire
 		lib32-libpipewire libpulse lib32-libpulse vkd3d lib32-vkd3d wget
