@@ -5,9 +5,6 @@ ARCH="$(uname -m)"
 DESKTOP=~/steam.desktop
 ICON=~/steam.png
 STARTUPWMCLASS=steam
-UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*-$ARCH.AppImage.zsync"
-
-URUNTIME="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/refs/heads/main/useful-tools/uruntime2appimage.sh"
 
 if [ ! -x 'runimage' ]; then
 	echo '== download base RunImage'
