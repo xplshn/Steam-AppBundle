@@ -137,7 +137,7 @@ echo "Generating [dwfs]AppBundle...(Go runtime)"
 	--appbundle-id="com.valvesoftware.Steam-$(date +%d_%m_%Y)-ivanHC" \
 	--disable-use-random-workdir \
 	--add-updinfo "$UPINFO" \
-	--output-to "Steam-${VERSION}-anylinux-${ARCH}.dwfs.AppBundle"
+	--output-to "Steam-$(cat ~/version)-anylinux-${ARCH}.dwfs.AppBundle"
 zsyncmake ./*.AppBundle -u ./*.AppBundle
 
 rm -f ./*.AppImage*
